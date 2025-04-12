@@ -41,6 +41,12 @@ def show_main_page():
             default=unique_years  # Default to all years selected
             )
             
+            # Add global chart scaling checkbox to sidebar
+            scale_charts = st.sidebar.checkbox(
+                "Масштабувати діаграми відносно даних", 
+                value=True
+            )
+            
             # If no years selected, use all years
             if not selected_years:
                 selected_years = unique_years
@@ -58,8 +64,9 @@ def show_main_page():
             with two:
                 plot_pie(filtered_df)
             
-            plot_emoji(filtered_df)
-            plot_media_type(filtered_df)
+            # Pass the scaling preference to the chart functions
+            plot_emoji(filtered_df, scale_charts)
+            plot_media_type(filtered_df, scale_charts)
     else:
         st.header("Вітаємо у Telegram Chat Analyzer! 🎉")
         st.write("Цей інструмент допоможе вам дослідити ваші чати у Telegram.")

@@ -76,7 +76,7 @@ def plot_pie(df):
     st.plotly_chart(fig)
             
 
-def plot_emoji(df):
+def plot_emoji(df, scale_charts=True):
     df['reaction_count'] = df['reactions'].apply(
         lambda x: x[0]['count'] 
         if isinstance(x, list) and len(x) > 0 and 'count' in x[0] 
@@ -101,17 +101,26 @@ def plot_emoji(df):
     for user in users:
         user_totals[user] = emoji_grouped[emoji_grouped['from'] == user]['reaction_count'].sum()
     
-    # Create pie charts with multiple subplots (one for each user)
+    # Calculate grid dimensions (max 4 columns)
+    num_users = len(users)
+    cols = min(num_users, 4)  # Maximum 4 columns
+    rows = (num_users + cols - 1) // cols  # Ceiling division
+    
+    # Create pie charts with grid layout
     fig = make_subplots(
-        rows=1, 
-        cols=len(users), 
-        specs=[[{'type': 'domain'} for _ in range(len(users))]],
+        rows=rows,
+        cols=cols,
+        specs=[[{'type': 'domain'} for _ in range(cols)] for _ in range(rows)],
         subplot_titles=[f"{user} ({int(user_totals[user])} реакцій)" for user in users]
     )
     
     # Add data for each user
     for i, user in enumerate(users):
         user_data = emoji_grouped[emoji_grouped['from'] == user]
+        
+        # Calculate row and column for this user
+        row_idx = i // cols + 1  # 1-indexed for plotly
+        col_idx = i % cols + 1   # 1-indexed for plotly
         
         fig.add_trace(
             go.Pie(
@@ -122,16 +131,15 @@ def plot_emoji(df):
                 textinfo='label+value',
                 textposition='inside',
                 marker=dict(line=dict(color='#000000', width=1)),
-                scalegroup='one'  # Use scalegroup for auto-scaling
+                scalegroup='one' if scale_charts else None  # Use passed parameter
             ),
-            row=1, col=i+1
+            row=row_idx, col=col_idx
         )
     
     # Update layout for better appearance
     fig.update_layout(
         title_text="Реакції емодзі за користувачами",
-        height=500 if len(users) <= 2 else 700,
-        width=300 * len(users),
+        height=400 * rows,  # Adjust height based on number of rows
         showlegend=True,
         legend=dict(orientation="h", y=-0.1)
     )
@@ -139,7 +147,7 @@ def plot_emoji(df):
     st.plotly_chart(fig, use_container_width=True)
 
 
-def plot_media_type(df):
+def plot_media_type(df, scale_charts=True):
     media_type = df[~df['media_type'].isnull()].copy()
     media_type = media_type[['from', 'media_type', 'date']]
     media_type_grouped = media_type.groupby(['from', 'media_type']).size().reset_index(name='count')
@@ -152,17 +160,26 @@ def plot_media_type(df):
     for user in users:
         user_totals[user] = media_type_grouped[media_type_grouped['from'] == user]['count'].sum()
     
-    # Створення кругової діаграми з декількома підграфіками (по одному для кожного користувача)
+    # Розрахунок розмірності сітки (максимум 4 колонки)
+    num_users = len(users)
+    cols = min(num_users, 4)  # Максимум 4 колонки
+    rows = (num_users + cols - 1) // cols  # Ділення з округленням вгору
+    
+    # Створення кругової діаграми з сітковим розташуванням
     fig = make_subplots(
-        rows=1, 
-        cols=len(users), 
-        specs=[[{'type': 'domain'} for _ in range(len(users))]],
+        rows=rows,
+        cols=cols,
+        specs=[[{'type': 'domain'} for _ in range(cols)] for _ in range(rows)],
         subplot_titles=[f"{user} ({user_totals[user]} елементів)" for user in users]
     )
     
     # Додавання даних для кожного користувача
     for i, user in enumerate(users):
         user_data = media_type_grouped[media_type_grouped['from'] == user]
+        
+        # Розрахунок рядка та колонки для цього користувача
+        row_idx = i // cols + 1  # 1-індексація для plotly
+        col_idx = i % cols + 1   # 1-індексація для plotly
         
         fig.add_trace(
             go.Pie(
@@ -173,16 +190,15 @@ def plot_media_type(df):
                 textinfo='label+value',
                 textposition='inside',
                 marker=dict(line=dict(color='#000000', width=1)),
-                scalegroup='one'  # Використання scalegroup для автоматичного масштабування
+                scalegroup='one' if scale_charts else None  # Use passed parameter
             ),
-            row=1, col=i+1
+            row=row_idx, col=col_idx
         )
     
     # Оновлення макету для кращого вигляду
     fig.update_layout(
         title_text="Розподіл типів медіа за користувачами",
-        height=500 if len(users) <= 2 else 700,
-        width=300 * len(users),
+        height=400 * rows,  # Налаштування висоти в залежності від кількості рядків
         showlegend=True,
         legend=dict(orientation="h", y=-0.1)
     )
