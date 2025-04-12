@@ -3,14 +3,18 @@ import streamlit as st
 from utils import *
 from plot import *
 
-st.set_page_config(layout="wide")
 
 def show_main_page():
     # File uploader for JSON files
     file = st.sidebar.file_uploader("Add your JSON files", accept_multiple_files=False, type='json')
-
+    btn = st.sidebar.button("Використати приклад")
+    if btn:
+        file = 'result.json'
     if file is not None:
-        df = read_json(file)
+        if isinstance(file, str):  # Handle the case where file is a string
+            df = read_json(open(file, 'r', encoding='utf-8'))
+        else:
+            df = read_json(file)
         
         df['date'] = pd.to_datetime(df['date'])
         df['year'] = df['date'].dt.year
