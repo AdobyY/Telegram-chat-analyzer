@@ -1,9 +1,6 @@
 # Telegram Chat Analyzer
 
-<video controls autoplay width="100%">
-   <source src="video.mp4" type="video/mp4">
-   Your browser does not support the video tag.
-</video>
+https://github.com/user-attachments/assets/30cf5d51-5125-48d5-91c3-c1fd549dfb30
 
 
 Telegram Chat Analyzer is an advanced and interactive web application designed to help you dive deep into your Telegram chat data. Whether you're analyzing group chats, personal conversations, or professional discussions, this tool provides a comprehensive suite of visualizations and metrics to uncover patterns, trends, and insights.
