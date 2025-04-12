@@ -4,7 +4,7 @@ https://github.com/user-attachments/assets/30cf5d51-5125-48d5-91c3-c1fd549dfb30
 
 ## 🌐 Live Demo
 
-[Try the Telegram Chat Analyzer online](https://telegram-chat-analyzer.streamlit.app/)
+[Try the Telegram Chat Analyzer online](https://telegram-chat-analyzer.streamlit.app/){:target="_blank"}
 
 ---
 
