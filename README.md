@@ -2,6 +2,11 @@
 
 https://github.com/user-attachments/assets/30cf5d51-5125-48d5-91c3-c1fd549dfb30
 
+## 🌐 Live Demo
+
+[Try the Telegram Chat Analyzer online](https://telegram-chat-analyzer.streamlit.app/)
+
+---
 
 Telegram Chat Analyzer is an advanced and interactive web application designed to help you dive deep into your Telegram chat data. Whether you're analyzing group chats, personal conversations, or professional discussions, this tool provides a comprehensive suite of visualizations and metrics to uncover patterns, trends, and insights.
 
@@ -15,18 +20,19 @@ Telegram Chat Analyzer is an advanced and interactive web application designed t
 - **📅 Yearly Filters**: Focus on specific time periods with year-based filtering.
 - **📄 Exportable Reports**: Generate and download PDF reports of your visualizations for sharing or offline analysis.
 
-
 ## 🚀 Installation
 
 Follow these steps to set up Telegram Chat Analyzer on your local machine:
 
 1. Clone this repository:
+
 ```bash
 git clone https://github.com/yourusername/Telegram-chat-analyzer.git
 cd Telegram-chat-analyzer
 ```
 
 2. Install the required dependencies:
+
 ```bash
 pip install -r requirements.txt
 ```
@@ -34,13 +40,14 @@ pip install -r requirements.txt
 ## 🛠️ Usage
 
 1. **Export Your Telegram Chat Data**:
+
    - Open Telegram (desktop app).
    - Select the chat you want to analyze.
    - Click on the three dots (⋮) in the top right corner.
    - Select "Export chat history."
    - Choose JSON format and download the file.
-
 2. **Run the Application**:
+
 ```bash
 streamlit run index.py
 ```
@@ -56,18 +63,18 @@ Telegram Chat Analyzer relies on the following Python libraries:
 - **Streamlit**: For building the interactive web application.
 - **Pandas**: For data manipulation and analysis.
 - **Plotly**: For creating interactive visualizations.
-- **WordCloud**: For generating word clouds from chat text.
-- **NumPy**: For numerical operations.
-- **Seaborn**: For additional data visualizations.
-- **FPDF**: For generating PDF reports.
 
 ## 🔒 Privacy and Security
 
-Your privacy is our top priority. Telegram Chat Analyzer runs entirely on your local machine, ensuring that your chat data is never uploaded to any server or shared with third parties.
+Your privacy is our top priority. Telegram Chat Analyzer:
 
-## 🤝 Contributing
+- Runs entirely on your local machine or browser
+- Never uploads your chat data to any server
+- Never shares your information with third parties
+- Provides optional data anonymization features
+- Allows you to delete all imported data with one click
 
-We welcome contributions to improve Telegram Chat Analyzer! Feel free to submit issues, feature requests, or pull requests to the repository.
+## 🤝 ContributingWe welcome contributions to improve Telegram Chat Analyzer! Feel free to submit issues, feature requests, or pull requests to the repository.
 
 ## 📜 License
 
