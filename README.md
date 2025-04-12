@@ -1,17 +1,23 @@
 # Telegram Chat Analyzer
 
-An interactive web application to analyze and visualize your Telegram chat data.
+![Demo Video](video.mp4)
 
-## Features
+Telegram Chat Analyzer is an advanced and interactive web application designed to help you dive deep into your Telegram chat data. Whether you're analyzing group chats, personal conversations, or professional discussions, this tool provides a comprehensive suite of visualizations and metrics to uncover patterns, trends, and insights.
 
-- **Message Stats**: View metrics for each user including average message length and message count
-- **Activity Heatmap**: See when conversations happen throughout the week
-- **Message Distribution**: View the share of messages per participant
-- **Media Analysis**: Analyze the types of media shared (photos, videos, stickers, etc.)
-- **Emoji Usage**: See which emojis are used most frequently
-- **Year Filter**: Filter your chat data by year using multi-select
+## 🌟 Key Features
 
-## Installation
+- **📊 Message Statistics**: Analyze average message length, maximum message length, and message counts for each participant.
+- **🔥 Activity Heatmap**: Discover when conversations are most active during the week and day.
+- **📈 Message Distribution**: Visualize the share of messages contributed by each participant.
+- **🎥 Media Analysis**: Explore the types of media shared, including photos, videos, stickers, and more.
+- **😂 Emoji Insights**: Identify the most frequently used emojis and their distribution among participants.
+- **📅 Yearly Filters**: Focus on specific time periods with year-based filtering.
+- **📄 Exportable Reports**: Generate and download PDF reports of your visualizations for sharing or offline analysis.
+
+
+## 🚀 Installation
+
+Follow these steps to set up Telegram Chat Analyzer on your local machine:
 
 1. Clone this repository:
 ```bash
@@ -24,37 +30,50 @@ cd Telegram-chat-analyzer
 pip install -r requirements.txt
 ```
 
-## Usage
+## 🛠️ Usage
 
-1. Export your Telegram chat data:
-   - Open Telegram (desktop app)
-   - Select the chat you want to analyze
-   - Click on the three dots (⋮) in the top right
-   - Select "Export chat history"
-   - Choose JSON format
-   - Download the file
+1. **Export Your Telegram Chat Data**:
+   - Open Telegram (desktop app).
+   - Select the chat you want to analyze.
+   - Click on the three dots (⋮) in the top right corner.
+   - Select "Export chat history."
+   - Choose JSON format and download the file.
 
-2. Run the application:
+2. **Run the Application**:
 ```bash
 streamlit run app.py
 ```
 
-3. Upload your JSON file and explore your chat data!
+3. **Upload and Explore**:
+   - Upload your exported JSON file.
+   - Use the interactive interface to explore your chat data through various visualizations and metrics.
 
-## Dependencies
+## 📚 Dependencies
 
-- Python 3.7+
-- streamlit
-- pandas
-- plotly
-- wordcloud
-- numpy
-- seaborn
+Telegram Chat Analyzer relies on the following Python libraries:
 
-## Privacy
+- **Streamlit**: For building the interactive web application.
+- **Pandas**: For data manipulation and analysis.
+- **Plotly**: For creating interactive visualizations.
+- **WordCloud**: For generating word clouds from chat text.
+- **NumPy**: For numerical operations.
+- **Seaborn**: For additional data visualizations.
+- **FPDF**: For generating PDF reports.
 
-This application runs locally on your machine. Your chat data is not uploaded to any server or shared with anyone.
+## 🔒 Privacy and Security
 
-## License
+Your privacy is our top priority. Telegram Chat Analyzer runs entirely on your local machine, ensuring that your chat data is never uploaded to any server or shared with third parties.
 
-Apache License 2.0
+## 🤝 Contributing
+
+We welcome contributions to improve Telegram Chat Analyzer! Feel free to submit issues, feature requests, or pull requests to the repository.
+
+## 📜 License
+
+This project is licensed under the Apache License 2.0. See the [LICENSE](LICENSE) file for details.
+
+---
+
+### 💡 Pro Tip
+
+Want to customize the visualizations or add new features? Dive into the `plot.py` and `main.py` files to tweak the code and make it your own!
