@@ -1,12 +1,9 @@
 import calendar
 import pandas as pd
 import streamlit as st
-import numpy as np
 
 import plotly.express as px
 import plotly.graph_objects as go
-from wordcloud import WordCloud
-from collections import Counter
 from plotly.subplots import make_subplots
 
 
@@ -203,4 +200,46 @@ def plot_media_type(df, scale_charts=True):
         legend=dict(orientation="h", y=-0.1)
     )
     
+    st.plotly_chart(fig, use_container_width=True)
+
+def plot_stacked_bar_chart(df):
+    df.loc[:, 'year_month'] = df['date'].dt.to_period('M').astype(str)
+    date_grouped = df.groupby(['from', 'year_month'])['date'].count().reset_index()
+    date_grouped = date_grouped.pivot(index='year_month', columns='from', values='date').fillna(0).reset_index()
+
+    # Create a stacked bar chart
+    fig = go.Figure()
+    for user in date_grouped.columns[1:]:  # Skip the 'year_month' column
+        fig.add_trace(
+            go.Bar(
+                x=date_grouped['year_month'],
+                y=date_grouped[user],
+                name=user
+            )
+        )
+
+    # Add total labels above each bar
+    date_grouped['total'] = date_grouped.iloc[:, 1:].sum(axis=1)
+    fig.add_trace(
+        go.Scatter(
+            x=date_grouped['year_month'],
+            y=date_grouped['total'],
+            mode='text',
+            text=date_grouped['total'],
+            textposition='top center',
+            showlegend=False
+        )
+    )
+
+    # Update layout for better appearance
+    fig.update_layout(
+        barmode='stack',
+        title='Кількість повідомлень за місяцями',
+        xaxis_title='Місяць',
+        yaxis_title='Кількість повідомлень',
+        legend_title='Користувачі',
+        xaxis=dict(tickangle=-45),
+        height=600
+    )
+
     st.plotly_chart(fig, use_container_width=True)
