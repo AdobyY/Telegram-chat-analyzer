@@ -50,56 +50,6 @@ def show_avg_and_max_len(df):
                 value=int(user['message_count']),
                 delta=int(user['message_count'] - user_stats['message_count'].mean())
             )
-            
-
-def plot_emoji(df):
-    df['reaction_count'] = df['reactions'].apply(
-        lambda x: x[0]['count'] 
-        if isinstance(x, list) and len(x) > 0 and 'count' in x[0] 
-        else None
-    )
-
-    df['reaction_emoji'] = df['reactions'].apply(
-        lambda x: x[0]['emoji'] 
-        if isinstance(x, list) and len(x) > 0 and 'count' in x[0] 
-        else None
-    )
-    emoji_df = df[['date', 'from', 'reaction_emoji', 'reaction_count']]
-
-    emoji_df = emoji_df.dropna(subset=['reaction_emoji'])
-    grouped = emoji_df.groupby(['from', 'reaction_emoji'])['reaction_count'].sum().reset_index()
-
-    # Фільтрація для двох користувачів
-    users = grouped['from'].unique()
-    filtered_df = grouped[grouped['from'].isin(users)]
-
-    # Створення кругової діаграми
-    fig = make_subplots(rows=1, cols=2, specs=[[{'type': 'domain'}, {'type': 'domain'}]])
-
-    for i, user in enumerate(users):
-        user_data = filtered_df[filtered_df['from'] == user]
-        fig.add_trace(
-            go.Pie(
-                labels=user_data['reaction_emoji'],
-                values=user_data['reaction_count'],
-                name=user,
-                hole=0.4,
-                textinfo='label+value'  # Показати мітку та кількість замість відсотків
-            ),
-            row=1, col=i + 1
-        )
-
-    fig.update_layout(
-        title_text="Реакції емодзі",
-        annotations=[
-            dict(text=users[0], x=0.18, y=0.5, font_size=14, showarrow=False),
-            dict(text=users[1], x=0.82, y=0.5, font_size=14, showarrow=False)
-        ]
-    )
-
-    st.plotly_chart(fig)
-
-
 
 def plot_heatmap(df):
     text_df = df[['date', 'from', 'text']].copy()
@@ -124,17 +74,69 @@ def plot_pie(df):
     fig.update_layout(title='Розподіл повідомлень за користувачами')
     
     st.plotly_chart(fig)
+            
 
+def plot_emoji(df):
+    df['reaction_count'] = df['reactions'].apply(
+        lambda x: x[0]['count'] 
+        if isinstance(x, list) and len(x) > 0 and 'count' in x[0] 
+        else None
+    )
 
-def plot_bar(df):
-    text_df = df[['date', 'from', 'text']].copy()
-    text_df['length'] = text_df['text'].apply(len)
+    df['reaction_emoji'] = df['reactions'].apply(
+        lambda x: x[0]['emoji'] 
+        if isinstance(x, list) and len(x) > 0 and 'count' in x[0] 
+        else None
+    )
+    emoji_df = df[['date', 'from', 'reaction_emoji', 'reaction_count']]
 
-    avg_length = text_df.groupby('from')['length'].mean().reset_index()
-    avg_length.rename(columns={'length': 'avg_length'}, inplace=True)
+    emoji_df = emoji_df.dropna(subset=['reaction_emoji'])
+    emoji_grouped = emoji_df.groupby(['from', 'reaction_emoji'])['reaction_count'].sum().reset_index()
 
-    max_length = text_df.groupby('from')['length'].max().reset_index()
-    max_length.rename(columns={'length': 'max_length'}, inplace=True)
+    # Get unique users
+    users = emoji_grouped['from'].unique()
+    
+    # Calculate total counts for each user for display in titles
+    user_totals = {}
+    for user in users:
+        user_totals[user] = emoji_grouped[emoji_grouped['from'] == user]['reaction_count'].sum()
+    
+    # Create pie charts with multiple subplots (one for each user)
+    fig = make_subplots(
+        rows=1, 
+        cols=len(users), 
+        specs=[[{'type': 'domain'} for _ in range(len(users))]],
+        subplot_titles=[f"{user} ({int(user_totals[user])} реакцій)" for user in users]
+    )
+    
+    # Add data for each user
+    for i, user in enumerate(users):
+        user_data = emoji_grouped[emoji_grouped['from'] == user]
+        
+        fig.add_trace(
+            go.Pie(
+                labels=user_data['reaction_emoji'],
+                values=user_data['reaction_count'],
+                name=user,
+                hole=0.4,
+                textinfo='label+value',
+                textposition='inside',
+                marker=dict(line=dict(color='#000000', width=1)),
+                scalegroup='one'  # Use scalegroup for auto-scaling
+            ),
+            row=1, col=i+1
+        )
+    
+    # Update layout for better appearance
+    fig.update_layout(
+        title_text="Реакції емодзі за користувачами",
+        height=500 if len(users) <= 2 else 700,
+        width=300 * len(users),
+        showlegend=True,
+        legend=dict(orientation="h", y=-0.1)
+    )
+    
+    st.plotly_chart(fig, use_container_width=True)
 
 
 def plot_media_type(df):
@@ -145,13 +147,10 @@ def plot_media_type(df):
     # Отримання унікальних користувачів
     users = media_type_grouped['from'].unique()
     
-    # Підрахунок загальної кількості для кожного користувача для масштабування
+    # Підрахунок загальної кількості для кожного користувача для відображення у заголовках
     user_totals = {}
     for user in users:
         user_totals[user] = media_type_grouped[media_type_grouped['from'] == user]['count'].sum()
-    
-    # Знаходження максимальної загальної кількості для масштабування
-    max_total = max(user_totals.values())
     
     # Створення кругової діаграми з декількома підграфіками (по одному для кожного користувача)
     fig = make_subplots(
@@ -165,9 +164,6 @@ def plot_media_type(df):
     for i, user in enumerate(users):
         user_data = media_type_grouped[media_type_grouped['from'] == user]
         
-        # Обчислення відносного коефіцієнта розміру (пропорційно загальній кількості)
-        size_factor = user_totals[user] / max_total
-        
         fig.add_trace(
             go.Pie(
                 labels=user_data['media_type'],
@@ -177,7 +173,7 @@ def plot_media_type(df):
                 textinfo='label+value',
                 textposition='inside',
                 marker=dict(line=dict(color='#000000', width=1)),
-                domain={'x': [0.1, 0.9], 'y': [0.2, 0.2 + 0.6 * size_factor]}  # Налаштування розміру
+                scalegroup='one'  # Використання scalegroup для автоматичного масштабування
             ),
             row=1, col=i+1
         )
