@@ -78,3 +78,13 @@ def show_main_page():
         st.markdown("### Як почати?")
         st.write("Просто завантажте JSON-файл з вашими чатами у боковій панелі, і ми зробимо все інше!")
         st.write("🚀 Готові? Почнемо!")
+        # Add GIF to sidebar
+        st.sidebar.markdown(
+            """
+            <div style="text-align: center;">
+                <img src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExYzI2ZW53OGQ2cjBjcHoweW4xMzZwb213OGFjeXRzZm5jaWthbGoyaiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l46Cy1rHbQ92uuLXa/giphy.gif" 
+                alt="Welcome GIF" style="width: 100%; max-width: 300px;">
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
